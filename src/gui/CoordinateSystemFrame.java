@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by ScorpionOrange on 2017/07/24.
@@ -18,8 +20,10 @@ public class CoordinateSystemFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JTextField textField_XKoordinate;
 	private JTextField textField_YKoordinate;
-	private CoordinateSystemComponent cosc;
-
+	
+	  public ArrayList<Integer> X_A =new ArrayList<Integer>();
+	    public ArrayList<Integer> Y_A =new ArrayList<Integer>();
+	    private CoordinateSystemComponent cosc=new CoordinateSystemComponent(X_A,Y_A);
 	
 	
 	
@@ -71,24 +75,23 @@ public class CoordinateSystemFrame extends JFrame{
 		    public void actionPerformed(ActionEvent e) {
 		    	int a=Integer.parseInt(textField_XKoordinate.getText());
 		    	int b=Integer.parseInt(textField_YKoordinate.getText());
+		    	X_A.add(a);
+		    	Y_A.add(b);
+		    	
+		    	if(!textArea.getText().equals(""))
+		    		textArea.setText(textArea.getText()+"\n"+"Point = "+X_A.size()+" X = "+a+" Y = "+b);
+		    	else
+		    		textArea.setText("Point  : "+X_A.size()+" X = "+a+" Y = "+b);
+		    
+		    	cosc=new CoordinateSystemComponent(X_A,Y_A);
 		        
-		    //	getContentPane().remove(cosc);
-		    //   revalidate();
-		    	//cosc=new CoordinateSystemComponent();
-		    	//cosc.setOrigin();
-		    	
-		    	//cosc.getPreferredSize();
-		    	
-		    	cosc.drawPoint(a, b);
-		  
-		       // cosc.revalidate();
 		        cosc.setVisible(true);
 		        cosc.graphics2D.setColor(Color.red);
+		        cosc.revalidate();
+		        cosc.repaint();
+		        add(cosc);
 		        getContentPane().repaint();
-		    	//your actions
-		        cosc.graphics2D.dispose();
 		        revalidate();
-		       // pack();
 		    }
 		});
 		panelAlleButton.add(btnHinzufuegen);
@@ -99,16 +102,15 @@ public class CoordinateSystemFrame extends JFrame{
 
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	 
-			    	getContentPane().remove(cosc);
-			         revalidate();
-			         cosc=new CoordinateSystemComponent();
-			 	
-			 		cosc.drawLine(100, 100, -100, -100);
-			 	
-			 		add(cosc);
-			         pack();
-			      //   getContentPane().removeAll();
+		    	X_A.clear();
+		    	Y_A.clear();;
+		    	cosc=new CoordinateSystemComponent(X_A,Y_A);
+		        cosc.setVisible(true);
+		        cosc.revalidate();
+		        cosc.repaint();
+		        add(cosc);
+		        getContentPane().repaint();
+		        revalidate();
 		    
 		    }
 		  		});
@@ -135,7 +137,7 @@ public class CoordinateSystemFrame extends JFrame{
 		JButton info = new JButton("?");
 		menuBar.add(info);
 		//getContentPane().add(panelKoordinaten);
-		cosc=new CoordinateSystemComponent();
+		//cosc=new CoordinateSystemComponent();
 		cosc.setBounds(12, 160, 959, 533);
 		add(cosc);
 		
@@ -152,6 +154,7 @@ class CoordinateSystemComponent extends JComponent{
     Dimension screenSize = toolkit.getScreenSize();
     int screenWidth = 959;
     int screenHeight = 533;
+    int count =1;
 
     Point2D center = new Point2D.Double(screenWidth / 2, ((screenHeight - 150) / 2)+300);
     Point2D leftMiddle = new Point2D.Double(0, ((screenHeight - 150) / 2)+300);
@@ -162,17 +165,43 @@ class CoordinateSystemComponent extends JComponent{
     //int X0, Y0;
     int X0 = (int)center.getX();
     int Y0 = (int)center.getY();
+    
+    public ArrayList<Integer> X_A =new ArrayList<Integer>();
+    public ArrayList<Integer> Y_A =new ArrayList<Integer>();
 
    public static Graphics2D graphics2D;
-
+   public CoordinateSystemComponent()
+   {
+	   super();
+   }
+   
+   public CoordinateSystemComponent(ArrayList<Integer> x_A,ArrayList<Integer> y_A)
+   {
+	   super();
+	   X_A=x_A;
+	   Y_A=y_A;
+	  
+   }
     
     
     
     public void paintComponent(Graphics graphics) {
         graphics2D = (Graphics2D) graphics;
         setOrigin();
-
-        /*int R = 200;
+        graphics2D.setColor(Color.BLUE);
+        System.out.println(X_A.size());
+        for(int i=0;i<X_A.size();i++)
+        {
+        	if(i==0 )
+        		drawPoint(X_A.get(i),Y_A.get(i));
+        	else
+        		drawLine(X_A.get(i-1),Y_A.get(i-1),X_A.get(i),Y_A.get(i));
+        	
+        }
+        //drawPoint(250,260);
+        
+        //drawLine(100,100,-100,-100);
+        /*int R = 200;;
         int A = -200, B = Circle(R, A);
         for(int i = 0; i < 2*R; i++){
             int a = A;
@@ -213,6 +242,8 @@ class CoordinateSystemComponent extends JComponent{
 
     // default Origin Point at Center
     public void setOrigin(){
+    	
+    	graphics2D.setColor(Color.GREEN);
         // draw X-axis
         graphics2D.draw(new Line2D.Double(leftMiddle, rightMiddle));
 
@@ -247,6 +278,7 @@ class CoordinateSystemComponent extends JComponent{
         int a2 = new Coordinate2D(x2, y2).getPixelPointX();
         int b2 = new Coordinate2D(x2, y2).getPixelPointY();
         graphics2D.drawLine(a1, b1, a2, b2);
+        
         
     }
     public void drawLine(Point2D A, Point2D B){

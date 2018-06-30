@@ -12,7 +12,7 @@ public class Main {
 		JFrame meinFenster = new CoordinateSystemFrame();
 		meinFenster.setVisible(true);
 		meinFenster.setSize(1000, 850);
-	//	meinFenster.setResizable(false);
+		meinFenster.setResizable(false);
 	}
 
 }
