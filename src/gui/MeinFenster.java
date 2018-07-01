@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 public class MeinFenster extends JFrame{
-	public MeinFenster() {
+	public MeinFenster() throws InterruptedException {
 		getContentPane().setLayout(null);
 		
 		this.setSize(1000, 780);

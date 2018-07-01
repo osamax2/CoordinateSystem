@@ -6,32 +6,81 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 
-/**
- * Created by ScorpionOrange on 2017/07/24.
- */
-/**
- * A frame that contains a panel with Coordinate System drawings.
- */
+
+
 public class CoordinateSystemFrame extends JFrame{
     
 	private static final long serialVersionUID = 1L;
 	private JTextField textField_XKoordinate;
 	private JTextField textField_YKoordinate;
+	JTextArea textArea = new JTextArea();
 	
 	  public ArrayList<Integer> X_A =new ArrayList<Integer>();
 	    public ArrayList<Integer> Y_A =new ArrayList<Integer>();
 	    private CoordinateSystemComponent cosc=new CoordinateSystemComponent(X_A,Y_A);
-	
-	
-	
-	public CoordinateSystemFrame(){
-
+	   
+	    
+	    
+	public CoordinateSystemFrame() {
+		
+		JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        
+        JMenu mnHome = new JMenu("Programm");
+        menuBar.add(mnHome);
+       
+        JMenu mnAboutm = new JMenu("?");
+        menuBar.add(mnAboutm);
+       
+        JMenuItem mnAbout =new JMenuItem(new AbstractAction("About") {
+            public void actionPerformed(ActionEvent e) {
+            	
+            	ImageIcon icon =new ImageIcon("about.ico");
+            	JFrame frame = new JFrame();
+                // Button pressed logic goes here
+            	JOptionPane.showMessageDialog(frame,
+            			"Name : Nina Bakalova\n"
+                 			    + "Matrikelnummer : s0560\n"
+                 			    + "Thanks for visit :)",
+            		    "About",
+            		    JOptionPane.INFORMATION_MESSAGE,
+            		    icon);
+           
+            	
+            }
+        });
+        mnAboutm.add(mnAbout);
+        
+        JMenuItem mdelete = new JMenuItem(new AbstractAction("Alle Loeschen") {
+            public void actionPerformed(ActionEvent e) {
+                // Button pressed logic goes here
+            	deleteAll();
+            }
+        });
+        mnHome.add(mdelete);
+		JMenuItem mnBeenden = new JMenuItem(new AbstractAction("Beenden") {
+            public void actionPerformed(ActionEvent e) {
+                // Button pressed logic goes here
+            	System.exit(0);
+            }
+        });
+		mnHome.add(mnBeenden);
+		
+		
+		
+		
+        
+        
+        
+        
        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setTitle("Coordinate System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
         
@@ -40,7 +89,7 @@ public class CoordinateSystemFrame extends JFrame{
 		getContentPane().add(panelKoordinatenWerte);
 		panelKoordinatenWerte.setLayout(null);
 		
-		JTextArea textArea = new JTextArea();
+		
 		textArea.setBounds(0, 0, 279, 139);
 		panelKoordinatenWerte.add(textArea);
 		
@@ -102,47 +151,31 @@ public class CoordinateSystemFrame extends JFrame{
 
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	X_A.clear();
-		    	Y_A.clear();;
-		    	cosc=new CoordinateSystemComponent(X_A,Y_A);
-		        cosc.setVisible(true);
-		        cosc.revalidate();
-		        cosc.repaint();
-		        add(cosc);
-		        getContentPane().repaint();
-		        revalidate();
-		    
+		    	
+		    deleteAll();
 		    }
 		  		});
 		panelAlleButton.add(btnAlleLoeschen);
-		
-		//JPanel panelKoordinaten = new JPanel();
-		//panelKoordinaten.setBounds(12, 160, 959, 533);
-	//	panelKoordinaten.setBackground(Color.LIGHT_GRAY);
-		
-		//panelKoordinaten.setLayout(null);
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu mnProramm = new JMenu("Programm");
-		menuBar.add(mnProramm);
-		
-		JMenuItem mnAlleLoeschen = new JMenuItem("Alle Loeschen");
-		mnProramm.add(mnAlleLoeschen);
-		
-		JMenuItem mnBeenden = new JMenuItem("Beenden");
-		mnProramm.add(mnBeenden);
-		
-		JButton info = new JButton("?");
-		menuBar.add(info);
-		//getContentPane().add(panelKoordinaten);
-		//cosc=new CoordinateSystemComponent();
 		cosc.setBounds(12, 160, 959, 533);
 		add(cosc);
 		
         pack();
     }
+	
+	
+	public void deleteAll()
+	{
+		X_A.clear();
+    	Y_A.clear();
+    	cosc=new CoordinateSystemComponent(X_A,Y_A);
+        cosc.setVisible(true);
+        cosc.revalidate();
+        cosc.repaint();
+        add(cosc);
+        getContentPane().repaint();
+        revalidate();
+        textArea.setText("");
+	}
 }
 
 /**
